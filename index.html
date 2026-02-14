@@ -120,7 +120,7 @@
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
-        <img src="${pickle.image}" alt="${pickle.name}">
+        <img src=${pickle.image} alt="${pickle.name}">
         <h3>${pickle.name}</h3>
         <p>Price: ₹${pickle.price}</p>
         <button onclick="addToCart(${index})">Add to Cart</button>

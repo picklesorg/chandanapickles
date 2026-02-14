@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pickles Shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
+    header { background: linear-gradient(90deg, #ff9800, #f57c00); padding: 10px; color: white; }
+    main { background: #fff3e0; padding: 20px; min-height: 400px; }
+    footer { background: black; padding: 15px; color: white; font-weight: bold; }
+
+    .header-buttons button { margin: 5px; padding: 8px 15px; background: #fff; border: 1px solid #333; cursor: pointer; border-radius: 5px; }
+
+    /* Pickle cards */
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px;
+      display: inline-block;
+      width: 200px;
+      background: #fff;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .card h3 { margin: 10px 0 5px; }
+    .card p { margin: 5px 0; }
+    .card button {
+      padding: 6px 12px;
+      background: #388e3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Cart section */
+    #cart { margin-top: 20px; }
+    #cart .card button { background: #d32f2f; }
+
+    #orderBtn {
+      display: none;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>చందన పికిల్స్</h1>
+    <div class="header-buttons">
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('services')">Services</button>
+      <button onclick="showSection('contact')">Contact</button>
+      <button onclick="showSection('address')">Address</button>
+    </div>
+  </header>
+
+  <main>
+    <h2>Pickles Menu</h2>
+    <div id="menu"></div>
+
+    <h2>Your Cart</h2>
+    <div id="cart"></div>
+    <h3 id="total"></h3>
+    <button id="orderBtn" onclick="placeOrder()">Order</button>
+
+    <!-- Sections -->
+    <div id="home" class="section">Welcome to Chandana Pickles Store! We offer delicious homemade pickles.</div>
+    <div id="services" class="section">Our services include bulk pickle orders, home delivery, and custom flavors.</div>
+    <div id="contact" class="section">📞 Contact us at: 6300351293</div>
+    <div id="address" class="section">🏠 Address: Chandana Pickles, Sullurpet, Andhra Pradesh</div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Pickles Store</p>
+  </footer>
+
+  <script>
+    const pricePerPickle = 120;
+    let cart = [];
+    const phoneNumber = "6300351293";
+
+    const pickles = [
+      { name: "Mango Pickle", image: "../chandanapickles/public/mango.jpeg" },
+      { name: "Lemon Pickle", image: "../chandanapickles/public/lemon.jpeg" },
+      { name: "Garlic Pickle", image: "../chandanapickles/public/garlic.jpeg" },
+      { name: "Tomato Pickle", image: "../chandanapickles/public/tomato.jpeg" },
+      { name: "Usiri Pickle", image: "../chandanapickles/public/usiri.jpeg" },
+      { name: "Red Mirchi Pickle", image: "../chandanapickles/public/redmirchi.jpeg" },
+      { name: "Ginger Pickle", image: "../chandanapickles/public/default.jpeg" },
+      { name: "Gongura Pickle", image: "../chandanapickles/public/default.jpeg" },
+      { name: "Karivepaku Pickle", image: "../chandanapickles/public/default.jpeg" },
+      { name: "Tamarind Pickle", image: "../chandanapickles/public/default.jpeg" },
+      { name: "Kakara Pickle", image: "../chandanapickles/public/default.jpeg" }
+    ];
+
+    function renderMenu() {
+      const menuDiv = document.getElementById("menu");
+      pickles.forEach((pickle, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${pickle.image}" alt="${pickle.name}">
+          <h3>${pickle.name}</h3>
+          <p>Price: ₹${pricePerPickle}</p>
+          <button onclick="addToCart(${index})">Add to Cart</button>
+        `;
+        menuDiv.appendChild(card);
+      });
+    }
+
+    function addToCart(index) {
+      cart.push(pickles[index]);
+      renderCart();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartDiv = document.getElementById("cart");
+      cartDiv.innerHTML = "";
+      let totalPrice = 0;
+
+      cart.forEach((item, index) => {
+        totalPrice += pricePerPickle;
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>Price: ₹${pricePerPickle}</p>
+          <button onclick="removeFromCart(${index})">Delete</button>
+        `;
+        cartDiv.appendChild(card);
+      });
+
+      document.getElementById("total").innerText = "Total Price: ₹" + totalPrice;
+      document.getElementById("orderBtn").style.display = cart.length > 0 ? "inline-block" : "none";
+    }
+
+    function placeOrder() {
+      if (cart.length === 0) return;
+
+      const now = new Date();
+      const dateTime = now.toLocaleString();
+
+      const items = cart.map(item => item.name).join(", ");
+      const totalPrice = cart.length * pricePerPickle;
+
+      const orderDetails = `Order Details:\nPickles: ${items}\nTotal Price: ₹${totalPrice}\nDate & Time: ${dateTime}`;
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(orderDetails)}`;
+      window.open(whatsappURL, "_blank");
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+      document.getElementById(sectionId).style.display = "block";
+    }
+
+    // Initialize menu
+    renderMenu();
+  </script>
+</body>
+</html>

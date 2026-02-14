@@ -53,6 +53,9 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    /* Hide sections until clicked */
+    .section { display: none; }
   </style>
 </head>
 <body>
@@ -66,9 +69,13 @@
     </div>
   </header>
 
+  <!-- ✅ Marquee text in Telugu -->
+  <marquee behavior="scroll" direction="left" style="background:#ffcc80; color:#000; font-size:18px; font-weight:bold; padding:8px;">
+    చందన పికిల్స్ సుల్లూరుపేట సంప్రదించండి: విశ్వనాథం సెల్: 9347111922
+  </marquee>
+
   <main>
     <h2>Pickles Menu</h2>
-    
     <div id="menu"></div>
 
     <h2>Your Cart</h2>
@@ -76,15 +83,12 @@
     <h3 id="total"></h3>
     <button id="orderBtn" onclick="placeOrder()">Order</button>
 
-    <!-- Sections -->
+    <!-- Sections (hidden until clicked) -->
     <div id="home" class="section">Welcome to Chandana Pickles Store! We offer delicious homemade pickles.</div>
     <div id="services" class="section">Our services include bulk pickle orders, home delivery, and custom flavors.</div>
-    <div id="contact" class="section">📞 Contact us jaswanth cell: 6300351293,viswanatham cell:9347111922</div>
-    <div id="address" class="section">🏠 Address: Chandana Pickles, Sullurpet,sullur,near bsnl office,tirupathi district, Andhra Pradesh</div>
+    <div id="contact" class="section">📞 Contact us jaswanth cell: 6300351293, viswanatham cell: 9347111922</div>
+    <div id="address" class="section">🏠 Address: Chandana Pickles, Sullurpet, near BSNL office, Tirupathi district, Andhra Pradesh</div>
   </main>
-<marquee behavior="scroll" direction="left" style="background:#ffcc80; color:#000; font-size:18px; font-weight:bold; padding:8px;">
-  చందన పికిల్స్ సుల్లూరుపేట సంప్రదించండి: విశ్వనాథం సెల్: 9347111922
-</marquee>
 
   <footer>
     <p>&copy; 2026 Pickles Store</p>
@@ -96,17 +100,17 @@
 
   // ✅ Each pickle now has its own price
   const pickles = [
-    { name: "Mango Pickle", image: "../chandanapickles/public/mango.jpeg", price: 150 },
-    { name: "Lemon Pickle", image: "../chandanapickles/public/lemon.jpeg", price: 100 },
-    { name: "Garlic Pickle", image: "../chandanapickles/public/garlic.jpeg", price: 120 },
-    { name: "Tomato Pickle", image: "../chandanapickles/public/tomato.jpeg", price: 130 },
-    { name: "Usiri Pickle", image: "../chandanapickles/public/usiri.jpeg", price: 140 },
-    { name: "Red Mirchi Pickle", image: "../chandanapickles/public/redmirchi.jpeg", price: 150 },
-    { name: "Ginger Pickle", image: "../chandanapickles/public/ginger.jpeg", price: 130 },
-    { name: "Gongura Pickle", image: "../chandanapickles/public/gongura.jpeg", price: 130 },
-    { name: "Karivepaku Pickle", image: "../chandanapickles/public/karivepaku.jpeg", price: 120},
-    { name: "Tamarind Pickle", image: "../chandanapickles/public/tamarind.jpeg", price: 120 },
-    { name: "Kakara Pickle", image: "../chandanapickles/public/kakara.jpeg", price: 120 }
+    { name: "Mango Pickle", image: "../public/chandanapickles/mango.jpeg", price: 150 },
+    { name: "Lemon Pickle", image: "https://yourusername.github.io/chandanapickles/lemon.jpeg", price: 100 },
+    { name: "Garlic Pickle", image: "https://yourusername.github.io/chandanapickles/garlic.jpeg", price: 120 },
+    { name: "Tomato Pickle", image: "https://yourusername.github.io/chandanapickles/tomato.jpeg", price: 130 },
+    { name: "Usiri Pickle", image: "https://yourusername.github.io/chandanapickles/usiri.jpeg", price: 140 },
+    { name: "Red Mirchi Pickle", image: "https://yourusername.github.io/chandanapickles/redmirchi.jpeg", price: 150 },
+    { name: "Ginger Pickle", image: "https://yourusername.github.io/chandanapickles/ginger.jpeg", price: 130 },
+    { name: "Gongura Pickle", image: "https://yourusername.github.io/chandanapickles/gongura.jpeg", price: 130 },
+    { name: "Karivepaku Pickle", image: "https://yourusername.github.io/chandanapickles/karivepaku.jpeg", price: 120},
+    { name: "Tamarind Pickle", image: "https://yourusername.github.io/chandanapickles/tamarind.jpeg", price: 120 },
+    { name: "Kakara Pickle", image: "https://yourusername.github.io/chandanapickles/kakara.jpeg", price: 120 }
   ];
 
   function renderMenu() {
@@ -141,7 +145,7 @@
     let totalPrice = 0;
 
     cart.forEach((item, index) => {
-      totalPrice += item.price; // ✅ use individual price
+      totalPrice += item.price;
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
@@ -163,12 +167,18 @@
     const now = new Date();
     const dateTime = now.toLocaleString();
 
-    const items = cart.map(item => `${item.name} (₹${item.price}) ${item.image}`).join(", ");
+    // ✅ Include image URLs in WhatsApp message
+    const items = cart.map(item => `${item.name} (₹${item.price}) - ${item.image}`).join("\n");
     const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
-    const orderDetails = `Order Details:\nPickles: ${items}\nTotal Price: ₹${totalPrice}\nDate & Time: ${dateTime}`;
+    const orderDetails = `Order Details:\n${items}\nTotal Price: ₹${totalPrice}\nDate & Time: ${dateTime}`;
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(orderDetails)}`;
     window.open(whatsappURL, "_blank");
+  }
+
+  function showSection(sectionId) {
+    document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
+    document.getElementById(sectionId).style.display = "block";
   }
 
   // Initialize menu

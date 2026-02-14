@@ -3,60 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <title>Pickles Shop</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
-    header { background: linear-gradient(90deg, #ff9800, #f57c00); padding: 10px; color: white; }
-    main { background: #fff3e0; padding: 20px; min-height: 400px; }
-    footer { background: black; padding: 15px; color: white; font-weight: bold; }
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
+  header { background: linear-gradient(90deg, #ff9800, #f57c00); padding: 10px; color: white; }
+  main { background: #fff3e0; padding: 20px; min-height: 400px; }
+  footer { background: black; padding: 15px; color: white; font-weight: bold; }
 
-    .header-buttons button { margin: 5px; padding: 8px 15px; background: #fff; border: 1px solid #333; cursor: pointer; border-radius: 5px; }
+  .header-buttons button { 
+    margin: 5px; 
+    padding: 8px 15px; 
+    background: #fff; 
+    border: 1px solid #333; 
+    cursor: pointer; 
+    border-radius: 5px; 
+  }
 
-    /* Pickle cards */
+  /* Pickle cards */
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    width: 200px;
+    background: #fff;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    vertical-align: top;
+  }
+  .card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  .card h3 { margin: 10px 0 5px; }
+  .card p { margin: 5px 0; }
+  .card button {
+    padding: 6px 12px;
+    background: #388e3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Cart section */
+  #cart { margin-top: 20px; }
+  #cart .card button { background: #d32f2f; }
+
+  #orderBtn {
+    display: none;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Hide sections until clicked */
+  .section { display: none; }
+
+  /* ✅ Media Queries */
+  /* Small screens (mobile) */
+  @media (max-width: 600px) {
+    header h1 { font-size: 20px; }
+    .header-buttons button { 
+      display: block; 
+      width: 90%; 
+      margin: 5px auto; 
+    }
     .card {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px;
-      display: inline-block;
-      width: 200px;
-      background: #fff;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+      width: 90%; 
+      margin: 10px auto;
     }
-    .card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 5px;
-    }
-    .card h3 { margin: 10px 0 5px; }
-    .card p { margin: 5px 0; }
-    .card button {
-      padding: 6px 12px;
-      background: #388e3c;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    /* Cart section */
-    #cart { margin-top: 20px; }
-    #cart .card button { background: #d32f2f; }
-
     #orderBtn {
-      display: none;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #1976d2;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      width: 90%;
     }
+  }
 
-    /* Hide sections until clicked */
-    .section { display: none; }
-  </style>
+  /* Medium screens (tablet) */
+  @media (min-width: 601px) and (max-width: 1024px) {
+    header h1 { font-size: 24px; }
+    .card {
+      width: 45%; 
+    }
+    .header-buttons button {
+      padding: 10px 20px;
+    }
+  }
+
+  /* Large screens (desktop) */
+  @media (min-width: 1025px) {
+    header h1 { font-size: 28px; }
+    .card {
+      width: 200px; 
+    }
+  }
+</style>
+
 </head>
 <body>
   <header>
@@ -168,7 +214,7 @@
     const dateTime = now.toLocaleString();
 
     // ✅ Include image URLs in WhatsApp message
-    const items = cart.map(item => `${item.name} (₹${item.price}) - ${item.image}`).join("\n");
+    const items = cart.map(item => `${item.name} (₹${item.price})`).join("\n");
     const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
     const orderDetails = `Order Details:\n${items}\nTotal Price: ₹${totalPrice}\nDate & Time: ${dateTime}`;
